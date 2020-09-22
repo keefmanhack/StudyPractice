@@ -8,7 +8,11 @@ class Main {
     for(int i =0; i< data.length; i++){
       tree.insertElement(data[i]);
     }
+    System.out.println("Height: " + tree.findHeight(tree.getRoot()));
+    System.out.println("Size: " + tree.findSize(tree.getRoot()));
     tree.deleteElement(7);
+    System.out.println("Size: " + tree.findSize(tree.getRoot()));
+    System.out.println("Height: " + tree.findHeight(tree.getRoot()));
     tree.printInOrder(tree.getRoot());
   }
 }
@@ -55,12 +59,26 @@ class BinaryTreeNode {
 
 class BinaryTree{
   BinaryTreeNode root;
-  public void printPreOrder(){
-    root = new BinaryTreeNode();
-  }
+  
 
   public BinaryTreeNode getRoot(){
     return this.root;
+  }
+
+  public int findHeight(BinaryTreeNode node){
+    if(node == null){
+      return 0;
+    }
+    int leftCt = findHeight(node.getLeft());
+    int rightCt = findHeight(node.getRight());
+    return leftCt > rightCt ? leftCt +1 : rightCt +1;
+  }
+
+  public int findSize(BinaryTreeNode node){
+    int leftCt = node.getLeft() == null ? 0: findSize(root.getLeft());
+    int rightCt = node.getRight() == null ? 0: findSize(node.getRight());
+
+    return 1 + leftCt + rightCt;
   }
 
   public void printInOrder(BinaryTreeNode node){
@@ -71,8 +89,18 @@ class BinaryTree{
     }
   }
 
-  public void printPostOrder(){
+  public void printPostOrder(BinaryTreeNode node){
+    if(node!=null){
+      printPostOrder(node.getLeft());
+      printPostOrder(node.getRight());
+      System.out.println(node.getData());
+    }
+  }
 
+  public void printPreOrder(BinaryTreeNode node){
+    System.out.println(node.getData());
+    printPreOrder(node.getLeft());
+    printPreOrder(node.getRight());
   }
 
   public void insertElement(int data){
@@ -102,13 +130,6 @@ class BinaryTree{
       }
   }
 
-
-  private BinaryTreeNode preOrder(BinaryTreeNode node){
-      
-      
-
-      return node;
-  }
 
   public void deleteElement(int data){
       if(root ==null){
@@ -184,10 +205,6 @@ class BinaryTree{
         }
       }
     }
-  }
-
-  public void findNode(int data){
-    
   }
 
   public BinaryTreeNode findElement(int data){
