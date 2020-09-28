@@ -1,11 +1,10 @@
 class Main {
   public static void main(String[] args) {
     int arr[] = {4,6,1,3,9,20,0};
-    MaxHeap heap = new MaxHeap(arr.length-1);
+    MaxHeap heap = new MaxHeap(arr.length);
     for(int i =0; i<arr.length; i++){
       heap.insert(arr[i]);
     }
-
     heap.printHeap();
   }
 }
@@ -28,20 +27,23 @@ class MaxHeap{
   }
 
   public void insert(int data){
-    int i;
-    
     if(this.count == this.capacity){
       resizeHeap();
     }
+    this.arr[this.count] = data;
+    int newItemIndex = this.count;
     this.count++;
+    int parentIndex = getParentIndex(newItemIndex);
 
-    i =  this.count-1;
-    while(i>=0 && data > this.arr[(i-1)/2]){
-      this.arr[i] = this.arr[(i-1)/2];
-      i=i-1/2;
-      System.out.println(i);
+    while(this.arr[newItemIndex]>this.arr[parentIndex] && newItemIndex !=0){
+        int temp = this.arr[newItemIndex];
+        this.arr[newItemIndex] = this.arr[parentIndex];
+        this.arr[parentIndex] = temp;
+        
+        newItemIndex = parentIndex;
+        parentIndex = getParentIndex(newItemIndex);
     }
-    this.arr[i] = data;
+    
   }
 
   private void resizeHeap(){
@@ -59,12 +61,12 @@ class MaxHeap{
     old_arr=null;
   }
 
-  public int Parent(int i){
-    if(i<=0 || i>=this.count){
+  public int getParentIndex(int i){
+    if(i<0 || i>this.count){
       return -1;
     }
 
-    return i-1/2;
+    return (i-1)/2;
   }
 
   private int LeftChild(int i){
